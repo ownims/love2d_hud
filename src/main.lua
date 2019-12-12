@@ -1,6 +1,4 @@
---local inutils = require "inutils"
-local btn0 = require("button")
-
+local menu = require("menu")
 local width = love.graphics.getWidth()
 local heigth = love.graphics.getHeight()
 local posX = width/2
@@ -10,14 +8,19 @@ local t = 0
 local yip = 1
 function love.load()
 	print("Game started")
-	btn0 = btn0.newButton()
+	args = {}
+	args[1] = playGame
+	args[2] = invertRotation
+	args[3] = exitGame
+	menu.init(args)
+
 end
 function love.update(dt)
 	t = t + dt
 end
 
 function love.draw()
-	btn0.draw()
+	menu.draw()
 	love.graphics.push()
 	love.graphics.translate(posX,posY)   -- rotation center
 	love.graphics.rotate((t*yip)/2)         -- rotate
@@ -28,9 +31,7 @@ function love.draw()
 end
 
 function love.keypressed(key, scancode, isrepeat)
-	if  key == "escape" then
-		love.event.quit(0)
-	end
+	menu.keypressed(key, scancode, isrepeat)
 end
 
 function love.keyreleased(key, scancode, isrepeat)
@@ -38,10 +39,10 @@ function love.keyreleased(key, scancode, isrepeat)
 end
 
 function love.mousepressed(x, y, button, istouch)
-	btn0.mousepressed(x,y, button, istouch, btnClick)
+	menu.mousepressed(x, y, button, istouch)
 end
 
-function btnClick() 
+function invertRotation() 
 	if yip > 0 then
 		yip = -1
 	else 
@@ -49,6 +50,13 @@ function btnClick()
 	end
 end
 
+function exitGame() 
+	print("Game Close")
+	love.event.quit(0)
+end
+function  playGame()
+	
+end
 function love.mousereleased(x, y, button, istouch)
 
 end
